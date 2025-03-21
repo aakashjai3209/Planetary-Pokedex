@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetary PokedeX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Stars and Twinkling Background */
+        .stars, .twinkling, .shooting-star, .dust-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .stars {
+            background: #000 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="50" cy="50" r="1" fill="white" /><circle cx="200" cy="150" r="1" fill="white" /><circle cx="300" cy="300" r="1" fill="white" /><circle cx="400" cy="50" r="1" fill="white" /><circle cx="500" cy="200" r="1" fill="white" /><circle cx="700" cy="100" r="1" fill="white" /><circle cx="800" cy="250" r="1" fill="white" /></svg>');
+            background-repeat: repeat;
+            opacity: 0.5;
+        }
+
+        .twinkling {
+            background: transparent url('https://www.transparenttextures.com/patterns/stardust.png');
+            animation: twinkling 5s infinite linear;
+        }
+
+        @keyframes twinkling {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        /* Shooting Star */
+        .shooting-star {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shooting-star::before,
+        .shooting-star::after,
+        .shooting-star span {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.9);
+            animation: shootingStar 2s infinite linear;
+        }
+
+        .shooting-star::before {
+            animation-delay: 0s;
+        }
+
+        .shooting-star::after {
+            animation-delay: 0.5s;
+        }
+
+        .shooting-star span:nth-child(1) {
+            animation-delay: 1s;
+        }
+
+        .shooting-star span:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        .shooting-star span:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        @keyframes shootingStar {
+            0% {
+                transform: translateX(-100%) translateY(-100%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Dust Particles */
+        .dust-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: floatParticles linear infinite;
+        }
+        @keyframes floatParticles {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Earth Animation */
+        .earth {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Earth_Western_Hemisphere_transparent_background.png/1024px-Earth_Western_Hemisphere_transparent_background.png') no-repeat center center/cover;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotateEarth 30s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes rotateEarth {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo .highlight {
+            color: #00a8ff;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #00a8ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero .highlight {
+            color: #00a8ff;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .cta-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .cta-buttons button.primary-btn {
+            background: #00a8ff;
+            color: #000;
+        }
+
+        .cta-buttons button.secondary-btn {
+            background: transparent;
+            border: 2px solid #00a8ff;
+            color: #00a8ff;
+        }
+
+        .cta-buttons button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Dashboard Section */
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 168, 255, 0.5);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background: #00a8ff;
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .card-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content p {
+            margin: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .social-icons .icon {
+            font-size: 1.5rem;
+            color: #00a8ff;
+            transition: transform 0.3s;
+        }
+
+        .social-icons .icon:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="shooting-star">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <!-- Dust Particles -->
+    <div class="dust-particles"></div>
+
+    <!-- Earth Animation -->
+    <div class="earth"></div>
+    
+    <header>
+        <div class="logo">
+            <span>Planetary</span>
+            <span class="highlight">VOYAGER</span>
+        </div>
+        <nav class="holographic">
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="exploration.html">Exploration</a></li>
+                <li><a href="#">Galaxies</a></li>
+                <li><a href="#">Discoveries</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Journey Through The <span class="highlight">Cosmos</span></h1>
+            <p>Explore the unknown reaches of space and witness the majesty of the universe</p>
+            <div class="cta-buttons">
+                <button class="primary-btn" onclick="location.href='explore.html'">Start Exploration</button>
+                <button class="secondary-btn">View Destinations</button>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <div class="card">
+                <div class="card-icon">🪐</div>
+                <h3>Nebula Expeditions</h3>
+                <p>Discover breathtaking cosmic cloud formations across the galaxy.</p>
+                <div class="card-footer">
+                    <span class="stats">42 Locations</span>
+                    <button class="card-btn">Explore</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">✨</div>
+                <h3>Star Systems</h3>
+                <p>Visit remarkable star clusters and solar systems with unique properties.</p>
+                <div class="card-footer">
+                    <span class="stats">189 Systems</span>
+                    <button class="card-btn">Explore</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🌑</div>
+                <h3>Exoplanets</h3>
+                <p>Explore worlds beyond our solar system with extraordinary environments.</p>
+                <div class="card-footer">
+                    <span class="stats">76 Planets</span>
+                    <button class="card-btn">Explore</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2023 Cosmic Voyager • Interstellar Navigation Systems</p>
+            <div class="social-icons">
+                <a href="#" class="icon">📡</a>
+                <a href="#" class="icon">🔭</a>
+                <a href="#" class="icon">🛰️</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function createParticles(count) {
+            const container = document.querySelector('.dust-particles');
+            for (let i = 0; i < count; i++) {
+                let particle = document.createElement('div');
+                particle.classList.add('particle');
+                let size = Math.random() * 3 + 1; // Random size between 1 and 5
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+                particle.style.animationDuration = `${Math.random() * 25 + 3}s`; // Random duration between 3 and 8 seconds
+                container.appendChild(particle);
+            }
+        }
+        createParticles(250); // Create 100 dust particles
+    </script>
+</body>
+</html>

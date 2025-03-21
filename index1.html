@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Basic setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Add orbit controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        // Create a sun
+        const sunGeometry = new THREE.SphereGeometry(1, 32, 32);
+        const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+        scene.add(sun);
+
+        // Load textures for planets
+        const textureLoader = new THREE.TextureLoader();
+        const planetTextures = {
+            mercury: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/3/3f/Mercury_%28planet%29.jpg'),
+            venus: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/e/e7/Venus_map.jpg'),
+            earth: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/8/83/Earth_political_map.jpg'),
+            mars: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/0/02/Mars_map.jpg'),
+            jupiter: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg'),
+            saturn: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/3/3d/Saturn_%28planet%29.jpg'),
+            uranus: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/3/3b/Uranus.jpg'),
+            neptune: textureLoader.load('https://upload.wikimedia.org/wikipedia/commons/5/5b/Neptune.jpg')
+        };
+
+        // Create planets
+        const planets = [];
+        const planetData = [
+            { size: 0.2, distance: 2, texture: planetTextures.mercury }, // Mercury
+            { size: 0.3, distance: 3, texture: planetTextures.venus }, // Venus
+            { size: 0.4, distance: 4, texture: planetTextures.earth }, // Earth
+            { size: 0.3, distance: 5, texture: planetTextures.mars }, // Mars
+            { size: 0.6, distance: 6, texture: planetTextures.jupiter }, // Jupiter
+            { size: 0.5, distance: 7, texture: planetTextures.saturn }, // Saturn
+            { size: 0.4, distance: 8, texture: planetTextures.uranus }, // Uranus
+            { size: 0.4, distance: 9, texture: planetTextures.neptune }  // Neptune
+        ];
+
+        planetData.forEach(data => {
+            const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ map: data.texture });
+            const planet = new THREE.Mesh(geometry, material);
+            planet.position.x = data.distance;
+            planets.push(planet);
+            scene.add(planet);
+        });
+
+        camera.position.z = 10;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            sun.rotation.y += 0.01; // Rotate the sun
+            planets.forEach((planet, index) => {
+                planet.rotation.y += 0.01; // Rotate the planets
+                planet.position.x = Math.cos(Date.now() * 0.001 + index) * planetData[index].distance; // Orbit
+                planet.position.z = Math.sin(Date.now() * 0.001 + index) * planetData[index].distance; // Orbit
+            });
+            controls.update(); // Update controls
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

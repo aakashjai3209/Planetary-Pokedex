@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - Cosmic Voyager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Stars & Twinkling */
+        .stars, .twinkling, .galaxy, .dust-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .stars {
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.5;
+        }
+
+        .twinkling {
+            animation: twinkle 5s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* Rotating Galaxy Effect */
+        .galaxy {
+            background: radial-gradient(circle, rgba(50,50,150,0.3) 10%, transparent 60%);
+            animation: rotateGalaxy 20s infinite linear;
+        }
+        @keyframes rotateGalaxy {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dust Particles */
+        .dust-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: floatParticles linear infinite;
+        }
+        @keyframes floatParticles {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Upload Container */
+        .upload-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgb(255, 0, 0);
+            max-width: 900px;
+            width: 90%;
+            height: 650px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header with Fluctuating Lights */
+        .header {
+            grid-column: 1 / span 2;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .light {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .red-light {
+            background-color: red;
+            animation: blinkRed 1.5s infinite alternate;
+        }
+
+        .green-light {
+            background-color: green;
+            animation: blinkGreen 1.5s infinite alternate;
+        }
+
+        @keyframes blinkRed {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes blinkGreen {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        /* Image Upload Box */
+        .upload-box {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .upload-box label {
+            padding: 10px 20px;
+            background: #00a8ff;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-block;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 50%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+        }
+
+        /* Form Input Box */
+        .form-box {
+            grid-column: 2;
+            grid-row: 2;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Output Section Box */
+        .output-box {
+            grid-column: 1;
+            grid-row: 3;
+            width: 150%;
+        }
+
+        /* Button Box */
+        .button-box {
+            grid-column: 2;
+            grid-row: 3;
+            width: 50%;
+            margin-left: 50%;
+        }
+
+        .button-box .submit-btn {
+            padding: 10px;
+            background: #00a8ff;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+            margin: 5px;
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background Effects -->
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="galaxy"></div>
+    <div class="dust-particles"></div>
+
+    <!-- Upload Container -->
+    <div class="upload-container">
+        <!-- Header with Fluctuating Lights -->
+        <div class="header">
+            <h2 style="margin-right: auto; font-size: 1.5rem;">Planet Dex</h2>
+            <div class="light red-light"></div>
+            <div class="light green-light"></div>
+        </div>
+
+        <!-- 1st Div - Image Upload -->
+        <div class="box upload-box">
+            <h2>Upload Your Image</h2>
+            <input type="file" id="file-upload" accept="image/*" style="display: none;">
+            <label for="file-upload">Choose Image</label>
+            <div class="image-preview" id="image-preview">
+                <img id="preview" src="#" alt="Image Preview">
+            </div>
+        </div>
+
+        <!-- 2nd Div - Form Inputs -->
+        <div class="box form-box">
+            <input type="text" class="input-field" placeholder="Mass">
+            <input type="text" class="input-field" placeholder="Diameter">
+            <input type="text" class="input-field" placeholder="Gravity">
+            <input type="text" class="input-field" placeholder="Density">
+            <input type="text" class="input-field" placeholder="Mean Temperature">
+        </div>
+
+        <!-- 3rd Div - Output Section -->
+        <div class="box output-box">
+            <h3>Output</h3>
+            <p>Uploaded file details will appear here.</p>
+        </div>
+
+        <!-- 4th Div - Upload & Add New Planet Buttons -->
+        <div class="box button-box">
+            <button class="submit-btn">Upload</button>
+            <button class="submit-btn">Add New Planet</button>
+        </div>
+    </div>
+
+    <script>
+        function createParticles(count) {
+            const container = document.querySelector('.dust-particles');
+            for (let i = 0; i < count; i++) {
+                let particle = document.createElement('div');
+                particle.classList.add('particle');
+                let size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 25 + 3}s`;
+                container.appendChild(particle);
+            }
+        }
+        createParticles(200);
+
+        const fileUpload = document.getElementById('file-upload');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview');
+
+        fileUpload.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
