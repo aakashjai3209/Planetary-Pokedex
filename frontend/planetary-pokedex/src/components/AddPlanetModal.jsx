@@ -20,7 +20,7 @@ const AddPlanetModal = ({ onClose, image, params }) => {
     formData.append("params", params);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/add_class", formData, {
+      const response = await axios.post("http://10.220.73.109:10000/add_class", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
