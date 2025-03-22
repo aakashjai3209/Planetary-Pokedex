@@ -139,7 +139,7 @@ const PokedexForm = () => {
     try {
       setIsSearching(true); // Start searching animation
       
-      const response = await axios.post("http://10.220.73.109:10000/analyze", formData, {
+      const response = await axios.post("https://planetary-pokedex.onrender.com/analyze", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
