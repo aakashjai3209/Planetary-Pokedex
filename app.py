@@ -14,7 +14,7 @@ from openai import OpenAI
 from torchvision.transforms import functional as TF
 import json
 
-PERPLEXITY_API_KEY='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'
+PERPLEXITY_API_KEY=''
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
@@ -155,8 +155,8 @@ def analyze_planet():
         - Density: {params[3]} kg/m³
         - Mean Temperature: {params[4]}°C
         
-        Provide a short description of this planet's characteristics and potential habitability in bullet points.
-        
+        Provide a short description of this planet's characteristics and potential habitability in 5 small bullet points.
+        And directly provide the points without any additional information.
         """
 
         # Make API call to Perplexity using OpenAI client
@@ -177,7 +177,7 @@ def analyze_planet():
         response = client.chat.completions.create(
             model="sonar",  # Replace with appropriate model name from Perplexity API documentation
             messages=messages,
-            max_tokens=150,
+            max_tokens=250,
             temperature=0.7,
             top_p=0.9,
             n=1,
@@ -193,6 +193,7 @@ def analyze_planet():
             "most_similar_image": most_similar_image,
             "planet_name": planet_name,
             "description": description_response,
+            "class_to_body": class_to_body 
         })
 
     except Exception as e:
