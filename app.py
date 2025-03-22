@@ -24,6 +24,7 @@ PERPLEXITY_API_KEY = os.getenv('PERPLEXITY_API_KEY')
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
 # Define paths for PCA files and YOLO model
 pca_dir = 'Solar-System-2/pca_features/'
