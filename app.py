@@ -13,8 +13,14 @@ import torch
 from openai import OpenAI
 from torchvision.transforms import functional as TF
 import json
+import dotenv
 
-PERPLEXITY_API_KEY=''
+# Load environment variables from .env file
+dotenv.load_dotenv()
+
+# Access the API key
+PERPLEXITY_API_KEY = os.getenv('PERPLEXITY_API_KEY')
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
